@@ -1,9 +1,8 @@
+# ThinDesk — Sistema de Gerenciamento de Chamados Técnicos
 
-# ThinDesk — Sistema de Login Seguro
+Projeto acadêmico desenvolvido para a disciplina de **Desenvolvimento de Software Corporativo**, utilizando Java, Spring Boot, Spring Security, Thymeleaf e MongoDB Atlas.
 
-Projeto acadêmico desenvolvido para a disciplina de Desenvolvimento de Software Corporativo.
-
-O ThinDesk utiliza Java, Spring Boot, Spring Security, Thymeleaf e MongoDB Atlas para implementar autenticação e autorização de usuários, com arquitetura modular e possibilidade de adaptação visual para outros projetos.
+O ThinDesk é uma aplicação web destinada ao gerenciamento de chamados de suporte técnico. O sistema integra autenticação de usuários, cadastro de clientes, gerenciamento de chamados e um dashboard com indicadores de atendimento.
 
 ## Tecnologias utilizadas
 
@@ -19,50 +18,95 @@ O ThinDesk utiliza Java, Spring Boot, Spring Security, Thymeleaf e MongoDB Atlas
 
 ## Funcionalidades
 
-- Cadastro de usuários com validação básica.
-- Armazenamento de senhas utilizando hash BCrypt.
+### Autenticação e segurança
+
+- Cadastro de usuários com validações básicas.
+- Armazenamento de senhas utilizando BCrypt.
 - Autenticação por e-mail e senha.
 - Login e logout com Spring Security.
 - Proteção CSRF em formulários.
-- Controle de acesso baseado em perfis (RBAC).
+- Controle de acesso baseado em perfis.
 - Persistência de usuários e sessões no MongoDB Atlas.
-- Interface modular utilizando fragmentos Thymeleaf.
+
+### Gerenciamento de chamados
+
+- Cadastro de novos chamados técnicos.
+- Listagem de chamados cadastrados.
+- Edição das informações de chamados existentes.
+- Atualização do status dos atendimentos.
+- Cancelamento lógico de chamados, preservando os registros no banco de dados.
+- Associação de informações de técnico e usuário aos chamados.
+
+Os chamados utilizam os seguintes status:
+
+| Status | Descrição |
+|---|---|
+| ABERTO | Chamado registrado e aguardando atendimento |
+| EM_ANDAMENTO | Atendimento em andamento |
+| CONCLUIDO | Atendimento finalizado |
+| CANCELADO | Chamado cancelado, com registro preservado |
+
+### Dashboard
+
+A página inicial do ThinDesk apresenta um dashboard com indicadores calculados a partir dos chamados armazenados no MongoDB.
+
+Os indicadores disponíveis são:
+
+- Total de chamados.
+- Chamados abertos.
+- Chamados em andamento.
+- Chamados concluídos.
+- Chamados cancelados.
+
+O dashboard também disponibiliza um botão de acesso ao gerenciamento de chamados.
+
+## Captura de tela do Dashboard
+
+![Dashboard do ThinDesk](docs/Dashboard.png)
+
+*Dashboard da aplicação ThinDesk, apresentando os indicadores de gerenciamento de chamados.*
+
+## Estrutura do projeto
+
+O projeto utiliza uma organização em camadas:
+
+- `controller`: recebe e processa requisições HTTP.
+- `service`: concentra operações e regras de negócio.
+- `repository`: realiza a persistência e consulta dos dados.
+- `entity`: representa as entidades armazenadas no MongoDB.
+- `templates`: contém as páginas HTML processadas pelo Thymeleaf.
+- `templates/fragments`: contém componentes visuais reutilizáveis.
+- `SecurityConfig.java`: configura autenticação e autorização.
+- `UsuarioDetailsService.java`: integra os usuários do MongoDB ao Spring Security.
+
+O gerenciamento de chamados utiliza principalmente `ChamadoController`, `ChamadoWebController`, `ChamadoService` e `ChamadoRepository`.
 
 ## Perfis de usuário
 
-O projeto define três perfis:
+O projeto define os seguintes perfis:
 
 - `ADMIN`: perfil administrativo.
 - `SUPORTE`: perfil de suporte técnico.
 - `CLIENTE`: perfil atribuído automaticamente ao cadastro público.
 
-As rotas `/clientes/**` e `/api/chamados/**` estão restritas aos perfis ADMIN e SUPORTE.
-
-## Estrutura do projeto
-
-- `controller`: tratamento das requisições HTTP.
-- `service`: regras de negócio e cadastro de usuários.
-- `repository`: acesso aos dados do MongoDB.
-- `entity`: modelos de dados.
-- `templates`: páginas HTML processadas pelo Thymeleaf.
-- `templates/fragments`: componentes visuais reutilizáveis.
-- `SecurityConfig.java`: configuração de autenticação e autorização.
-- `UsuarioDetailsService.java`: integração do Spring Security com os usuários do MongoDB.
+A configuração de segurança utiliza os perfis para controlar o acesso às funcionalidades protegidas. O README original documenta restrições específicas para `/clientes/**` e `/api/chamados/**`.
 
 ## Requisitos para execução
 
-- JDK 23
-- Acesso ao MongoDB Atlas
-- IntelliJ IDEA ou outra IDE compatível
-- Maven Wrapper incluído no projeto
+- JDK 23.
+- Acesso a uma instância do MongoDB Atlas.
+- Maven Wrapper, incluído no projeto.
+- IntelliJ IDEA ou outra IDE Java compatível.
 
 ## Configuração do MongoDB Atlas
 
-1. Criar um cluster no MongoDB Atlas.
-2. Criar um usuário de banco de dados com permissões adequadas.
-3. Configurar o acesso de rede no Atlas.
-4. Obter a URI de conexão do driver Java.
-5. Configurar a variável de ambiente `MONGODB_URI`.
+Para executar a aplicação:
+
+1. Disponibilize um cluster no MongoDB Atlas.
+2. Configure um usuário de banco de dados com as permissões necessárias.
+3. Autorize o acesso de rede à instância.
+4. Obtenha a URI de conexão.
+5. Configure a variável de ambiente `MONGODB_URI`.
 
 O arquivo `application.properties` utiliza:
 
@@ -75,65 +119,108 @@ spring.session.mongodb.collection-name=sessions
 server.servlet.session.timeout=30m
 ```
 
-A variável `MONGODB_URI` deve conter a URI completa do Atlas, incluindo as credenciais locais. Senhas reais não devem ser publicadas no repositório.
+A variável `MONGODB_URI` deve conter o endereço de conexão válido do banco de dados, incluindo as credenciais necessárias.
 
-## Como executar
+**Por segurança, senhas e strings de conexão completas não devem ser publicadas no GitHub.**
 
-No IntelliJ IDEA:
+## Como executar localmente
 
-1. Abrir a pasta que contém `pom.xml`.
-2. Aguardar a importação das dependências Maven.
-3. Configurar `MONGODB_URI` nas variáveis de ambiente da execução.
-4. Executar a classe `com.pfc.ThindeskApplication`.
+### IntelliJ IDEA
 
-Alternativamente, pelo terminal do Windows, na pasta do `pom.xml`:
+1. Abra a pasta do projeto que contém `pom.xml`.
+2. Aguarde a importação das dependências Maven.
+3. Configure a variável `MONGODB_URI` em **Run → Edit Configurations**.
+4. Execute a classe principal `com.pfc.ThindeskApplication`.
+5. Acesse a aplicação pelo navegador.
+
+### Terminal do Windows
+
+Com a variável de ambiente configurada, execute na pasta do projeto:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-Neste caso, a variável `MONGODB_URI` precisa estar disponível no ambiente do terminal.
+O servidor utiliza a porta 8080 por padrão.
 
-A aplicação utiliza, por padrão, a porta 8080.
+### Endereços locais
 
-Endereços:
+| Página | Endereço |
+|---|---|
+| Login | `http://localhost:8080/login` |
+| Cadastro | `http://localhost:8080/cadastro` |
+| Dashboard | `http://localhost:8080/` |
+| Chamados | `http://localhost:8080/chamados` |
 
-- Login: `http://localhost:8080/login`
-- Cadastro: `http://localhost:8080/cadastro`
-- Página inicial: `http://localhost:8080/`
+## Acesso à aplicação publicada
 
-## Segurança implementada
+**Endereço público:** inserir o link após concluir o deploy.
 
-As senhas são armazenadas como hashes BCrypt, em vez de texto puro.
+A aplicação disponibiliza uma página de cadastro de usuários em `/cadastro` e autenticação em `/login`.
 
-O cadastro público atribui obrigatoriamente o perfil CLIENTE, impedindo a escolha direta de privilégios administrativos.
+Antes da entrega final, o acesso público deverá ser testado em um navegador sem sessão previamente autenticada.
 
-A autenticação consulta usuários persistidos no MongoDB Atlas através de um serviço compatível com `UserDetailsService`.
+## Versionamento semântico
 
-O Spring Security controla o acesso às rotas protegidas e realiza o logout por requisição POST com proteção CSRF.
+O projeto adota como referência o padrão **Semantic Versioning (SemVer)**, representado por:
 
-O Spring Session MongoDB é utilizado para armazenar as sessões HTTP no banco de dados.
+`MAJOR.MINOR.PATCH`
 
-## Testes manuais realizados
+Cada componente possui um significado:
 
-- Inicialização do Spring Boot.
-- Cadastro de usuário no MongoDB Atlas.
-- Verificação do hash BCrypt e do perfil CLIENTE.
-- Login com conta cadastrada.
-- Bloqueio HTTP 403 de CLIENTE em `/clientes`.
-- Bloqueio HTTP 403 de CLIENTE em `/api/chamados`.
-- Logout com redirecionamento para a página de login.
-- Verificação de acesso protegido após logout.
-- Verificação da criação de documentos na coleção `sessions`.
+- **MAJOR:** alterações incompatíveis com versões anteriores.
+- **MINOR:** inclusão de funcionalidades compatíveis com versões anteriores.
+- **PATCH:** correções de defeitos compatíveis com versões anteriores.
 
-## Adaptação para outros temas
+Também podem ser utilizados identificadores de pré-lançamento, como `alpha` e `beta`.
 
-A lógica de autenticação foi separada em serviços, repositórios e configurações do Spring Security.
+### Exemplo: 1.0.2-beta
 
-A interface utiliza templates e fragmentos Thymeleaf, permitindo substituir elementos visuais sem reescrever a lógica central de autenticação.
+- `1`: versão principal (MAJOR).
+- `0`: versão secundária (MINOR).
+- `2`: versão de correção (PATCH).
+- `beta`: identificador de pré-lançamento, indicando uma versão disponibilizada antes da versão estável correspondente.
 
-## Finalidade
+O versionamento semântico contribui para organizar a evolução do software, comunicar alterações e identificar versões disponibilizadas no repositório.
 
-Projeto acadêmico desenvolvido para demonstração de autenticação, autorização, proteção de credenciais e persistência de sessões.
+## Testes manuais
 
-Não se destina a ambientes de produção sem testes, revisão de segurança e aprimoramento das regras de acesso.
+### Gerenciamento de chamados
+
+Durante o desenvolvimento da atividade, foram realizados os seguintes testes:
+
+- Inicialização da aplicação Spring Boot.
+- Conexão com o MongoDB Atlas.
+- Acesso ao sistema utilizando cadastro e login.
+- Cadastro de um novo chamado técnico.
+- Listagem do chamado cadastrado.
+- Edição da descrição de um chamado.
+- Cancelamento lógico de um chamado.
+- Verificação da atualização do status para `CANCELADO`.
+- Exibição dos indicadores do dashboard.
+
+### Autenticação e autorização
+
+A documentação original registra verificações relacionadas a:
+
+- Armazenamento de senhas com BCrypt.
+- Atribuição do perfil CLIENTE no cadastro público.
+- Bloqueio de acesso de CLIENTE a determinadas rotas protegidas.
+- Logout e proteção de acesso após encerramento da sessão.
+- Persistência das sessões na coleção `sessions` do MongoDB.
+
+Essas verificações pertencem ao histórico documentado do projeto e devem ser distinguidas dos testes realizados especificamente para a atividade final.
+
+## Segurança e limitações
+
+O sistema utiliza Spring Security, BCrypt e MongoDB Atlas para implementar autenticação, autorização e persistência.
+
+O cancelamento de chamados é lógico, realizado pela atualização do status para `CANCELADO`, sem excluir o documento do banco de dados.
+
+Por se tratar de um projeto acadêmico, a aplicação ainda requer avaliações adicionais de segurança, validações e testes antes de uma utilização em ambiente de produção.
+
+## Finalidade acadêmica
+
+O ThinDesk foi desenvolvido para demonstrar conceitos de Desenvolvimento de Software Corporativo, incluindo arquitetura em camadas, persistência de dados, autenticação, autorização, operações de gerenciamento de chamados e visualização de indicadores.
+
+A implementação reúne funcionalidades desenvolvidas ao longo da disciplina e aprimoramentos realizados para a atividade prática individual final.

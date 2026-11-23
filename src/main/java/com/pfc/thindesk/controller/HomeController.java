@@ -35,9 +35,37 @@ public class HomeController {
     @GetMapping("/")
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView("layout");
+
         String fragment = "home :: content";
-        log.info("Carregando fragmento: {}", fragment); // Log para depuração
+        log.info("Carregando fragmento: {}", fragment);
+
+        List<Chamado> chamados = chamadoService.listarChamados();
+
+        long totalChamados = chamados.size();
+
+        long abertos = chamados.stream()
+                .filter(chamado -> "ABERTO".equals(chamado.getStatus()))
+                .count();
+
+        long emAndamento = chamados.stream()
+                .filter(chamado -> "EM_ANDAMENTO".equals(chamado.getStatus()))
+                .count();
+
+        long concluidos = chamados.stream()
+                .filter(chamado -> "CONCLUIDO".equals(chamado.getStatus()))
+                .count();
+
+        long cancelados = chamados.stream()
+                .filter(chamado -> "CANCELADO".equals(chamado.getStatus()))
+                .count();
+
         modelAndView.addObject("content", fragment);
+        modelAndView.addObject("totalChamados", totalChamados);
+        modelAndView.addObject("abertos", abertos);
+        modelAndView.addObject("emAndamento", emAndamento);
+        modelAndView.addObject("concluidos", concluidos);
+        modelAndView.addObject("cancelados", cancelados);
+
         return modelAndView;
     }
 

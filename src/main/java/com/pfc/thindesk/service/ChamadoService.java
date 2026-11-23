@@ -1,10 +1,10 @@
 package com.pfc.thindesk.service;
 
 import com.pfc.thindesk.entity.Chamado;
+import com.pfc.thindesk.repository.ChamadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import com.pfc.thindesk.repository.ChamadoRepository;
 
 @Service
 public class ChamadoService {
@@ -33,4 +33,14 @@ public class ChamadoService {
                 .orElseThrow(() -> new RuntimeException("Chamado não encontrado com id: " + id));
     }
 
+    public Chamado buscarPorId(String id) {
+        return chamadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chamado não encontrado com id: " + id));
+    }
+
+    public Chamado cancelarChamado(String id) {
+        Chamado chamado = buscarPorId(id);
+        chamado.setStatus("CANCELADO");
+        return chamadoRepository.save(chamado);
+    }
 }
