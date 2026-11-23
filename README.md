@@ -4,6 +4,16 @@ Projeto acadêmico desenvolvido para a disciplina de **Desenvolvimento de Softwa
 
 O ThinDesk é uma aplicação web destinada ao gerenciamento de chamados de suporte técnico. O sistema integra autenticação de usuários, cadastro de clientes, gerenciamento de chamados e um dashboard com indicadores de atendimento.
 
+## Aplicação publicada
+
+O ThinDesk está disponível publicamente por meio da plataforma Render.
+
+**Endereço da aplicação:** https://thindesk-app.onrender.com
+
+A aplicação permite autenticação de usuários, gerenciamento de chamados técnicos e acompanhamento dos indicadores pelo dashboard.
+
+**Observação:** por utilizar a modalidade gratuita do Render, o primeiro acesso após um período de inatividade pode demorar mais.
+
 ## Tecnologias utilizadas
 
 - Java 23
