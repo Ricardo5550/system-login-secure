@@ -19,19 +19,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/cadastro", "/cadastrar", "/css/**", "/dist/**", "/plugins/**", "/js/**", "/images/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/login",
+                                "/cadastro",
+                                "/cadastrar",
+                                "/css/**",
+                                "/dist/**",
+                                "/plugins/**",
+                                "/js/**",
+                                "/images/**"
+                        ).permitAll()
 
-                    .requestMatchers("/clientes", "/clientes/**")
-                    .hasAnyRole("ADMIN", "SUPORTE")
+                        .requestMatchers(
+                                "/clientes",
+                                "/clientes/**",
+                                "/chamados",
+                                "/chamados/**",
+                                "/api/chamados",
+                                "/api/chamados/**"
+                        ).hasAnyRole("ADMIN", "SUPORTE")
 
-                    .requestMatchers("/api/chamados", "/api/chamados/**")
-                    .hasAnyRole("ADMIN", "SUPORTE")
-
-
-                    .anyRequest().authenticated() // Exigir autenticação para qualquer outra página
-            )
-            .formLogin(form -> form
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
                 .loginPage("/login") // Definir a URL da página de login personalizada
                 .defaultSuccessUrl("/", true) // Redirecionar para /home após login bem-sucedido
                 .permitAll() // Permitir que todos acessem a página de login
