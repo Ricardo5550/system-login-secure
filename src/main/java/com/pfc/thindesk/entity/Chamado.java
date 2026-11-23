@@ -3,9 +3,8 @@ package com.pfc.thindesk.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 @Document(collection = "chamados")
-public class Chamado{
+public class Chamado {
     
     @Id
     private String id;

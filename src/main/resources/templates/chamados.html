@@ -21,14 +21,18 @@
         </div>
         <div class="container mt-4" th:fragment="content">
             <h2 class="mb-4">Lista de Chamados</h2>
+            <a th:href="@{/chamados/novo}" class="btn btn-primary mb-3">
+                Novo Chamado
+            </a>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Descricao</th>
+                        <th>Descrição</th>
                         <th>Status</th>
                         <th>Tipo</th>
-                        <th>Tecnico</th>
+                        <th>Técnico</th>
                         <th>Usuário</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,9 +44,19 @@
                         <td th:text="${chamado?.tecnico}"></td>
                         <td th:text="${chamado?.usuario}"></td>
                         <td>
-                            <a th:href="@{'/chamados/novo/'}" class="btn btn-primary btn-sm">Novo</a>
                             <a th:href="@{'/chamados/atualizar/' + ${chamado.id}}" class="btn btn-warning btn-sm">Editar</a>
-                            <a th:href="@{'/chamados/cancelar/' + ${chamado.id}}" class="btn btn-danger btn-sm">Cancelar</a>
+                            <form th:action="@{/chamados/cancelar/{id}(id=${chamado.id})}"
+                                  method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Deseja realmente cancelar este chamado?');">
+
+                                <button type="submit"
+                                        class="btn btn-danger btn-sm"
+                                        th:disabled="${chamado.status == 'CANCELADO'}">
+                                    Cancelar
+                                </button>
+
+                            </form>
                         </td>
                     </tr>
                 </th:block>
