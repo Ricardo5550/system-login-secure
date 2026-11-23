@@ -193,6 +193,8 @@ Também podem ser utilizados identificadores de pré-lançamento, como `alpha` e
 
 O versionamento semântico contribui para organizar a evolução do software, comunicar alterações e identificar versões disponibilizadas no repositório.
 
+A versão atual do ThinDesk é 1.0.0-alpha, seguindo o padrão de versionamento semântico MAJOR.MINOR.PATCH. O primeiro número representa a versão principal; o segundo, a introdução de funcionalidades compatíveis; e o terceiro, as correções de problemas compatíveis. O sufixo alpha indica que a aplicação ainda se encontra em uma versão preliminar, sujeita a ajustes e validações.
+
 ## Testes manuais
 
 ### Gerenciamento de chamados

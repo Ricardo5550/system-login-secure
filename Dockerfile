@@ -15,7 +15,7 @@ FROM eclipse-temurin:23-jre
 
 WORKDIR /app
 
-COPY --from=build /app/target/thindesk-1.0-alpha.war app.war
+COPY --from=build /app/target/thindesk-1.0.0-alpha.war app.war
 
 EXPOSE 10000
 
